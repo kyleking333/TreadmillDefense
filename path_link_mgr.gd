@@ -18,49 +18,59 @@ var path_speed: float = 100
 @onready var _link_template = load("path_link.tscn")
 var _level_width: float
 var _links: Array[PathLink]
-var _link_width: float
+var _link_width: float = 64
 var _first_visible_link_index = 0
-
 
 # Constants
 const _min_links_to_insert = 4
 
+# Helpers
+
+func _prev_link_i(i):
+	return (i - 1 + len(_links)) % len(_links)
+
+func _next_link_i(i):
+	return (i + 1) % len(_links)
 
 
 func _ready() -> void:
-	var first_link = _link_template.instantiate()
-	_link_width =first_link.get_size()[0]
-	first_link.position = level_area.position
-	_links.append(first_link)
-	add_child(first_link)
 	_level_width = level_area.get_size()[0]
 	num_fully_visible_pathlinks = _level_width / _link_width
 	max_num_visible_pathlinks = num_fully_visible_pathlinks + 1
-	for i in range(num_fully_visible_pathlinks-1):
-		var next_link = _link_template.instantiate()
-		next_link.position = level_area.position + Vector2(i * _link_width, 0)
-		_links.append(next_link)
-		add_child(next_link)
+	_insert(0, _min_links_to_insert, true)  # first few links
+	while len(_links) + _min_links_to_insert < max_num_visible_pathlinks:
+		_insert(len(_links)-1, _min_links_to_insert, true)  # more links, don't need to wrap
+	_insert(len(_links)-1)  # last links, need to wrap to connect with first link
 	
-	_insert_after(len(_links)-1)  # should have more than the bare minimum #links
+	var to_idx = func to_idx(v: Vector2): return int(v.y / 64)
+	
+	for link in _links:
+		print(", ".join(link.inputs.map(to_idx)) + " -> " + ", ".join(link.outputs.map(to_idx)))
 
 func insert():
-	_insert_after(len(_links)-1)  #TODO: not constant value, random index into hidden links
+	_insert(len(_links)-1)  #TODO: not constant value, random index into hidden links
 
-# assumes always called on hidden indexes
-func _insert_after(pathlink_index: int, num_links=_min_links_to_insert):
+func _insert(pathlink_index: int, num_links=_min_links_to_insert, ignore_output_matching=false):
 	for i in range(pathlink_index, len(_links)):
 		_links[i].position += Vector2(_link_width * num_links, 0)  # shift olds out of the way
-	for i in range(_min_links_to_insert):
+	for i in range(num_links):
 		var next_link = _link_template.instantiate()
-		next_link.position = level_area.position + Vector2(i * _link_width, 0)
-		_links.insert(pathlink_index + i, next_link)
+		var new_index = pathlink_index + i
+		_links.insert(new_index, next_link)
+		if len(_links) == 1:  # first ever link
+			next_link.position = level_area.position
+		else:
+			var prev_link = _links[_prev_link_i(new_index)]
+			next_link.position = prev_link.position + Vector2(_link_width, 0)
+			next_link.inputs = prev_link.outputs.duplicate()
+			if i+1 == num_links and not ignore_output_matching:  # last iter
+				next_link.outputs = _links[_next_link_i(new_index)].inputs.duplicate()
 		add_child(next_link)
 		
 func _process(delta: float) -> void:
 	for link in _links:
 		link.position += Vector2(path_speed * delta, 0)
 	if _links[_first_visible_link_index].position.x > level_area.position.x:  # left a gap at the front
-		var index_before_first = (_first_visible_link_index - 1 + len(_links)) % len(_links)
+		var index_before_first = _prev_link_i(_first_visible_link_index)
 		_links[index_before_first].position = _links[_first_visible_link_index].position - Vector2(_link_width, 0)
 		_first_visible_link_index = index_before_first

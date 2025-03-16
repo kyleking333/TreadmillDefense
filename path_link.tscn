@@ -6,8 +6,9 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_srjps"]
 size = Vector2(61.99, 8.70968)
 
-[node name="PathLink" type="Area2D"]
+[node name="PathLink" type="Area2D" node_paths=PackedStringArray("path_sprite")]
 script = ExtResource("1_f02go")
+path_sprite = NodePath("PathSprite")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(31.005, 540)
@@ -15,7 +16,14 @@ scale = Vector2(1, 124)
 shape = SubResource("RectangleShape2D_srjps")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
+visible = false
 modulate = Color(0.341176, 0.298039, 0.317647, 1)
 position = Vector2(31, 540)
 scale = Vector2(0.484375, 8.4375)
+texture = ExtResource("1_u4o37")
+
+[node name="PathSprite" type="Sprite2D" parent="."]
+visible = false
+position = Vector2(31, 32)
+scale = Vector2(0.484375, 0.5)
 texture = ExtResource("1_u4o37")
