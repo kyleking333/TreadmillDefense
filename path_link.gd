@@ -7,6 +7,8 @@ extends Area2D
 @export var inputs: Array[Vector2]
 @export var outputs: Array[Vector2]
 
+const _num_ports_distribution = [1, 1, 1, 1, 1, 2, 2, 3]
+
 func get_size():
 	return $Sprite2D.texture.get_size() * $Sprite2D.scale
 
@@ -25,12 +27,12 @@ func _ready() -> void:
 	
 	var l = int(get_size()[1])
 	if len(inputs) == 0:  # generate inputs if needed
-		for i in range(1 + (randi() % 3)):
+		for i in range(_num_ports_distribution.pick_random()):
 			var y  = _snap_y(randi() % l)
 			inputs.append(Vector2(0, y))
 
 	if len(outputs) == 0:  # generate outputs if needed
-		for i in range(1 + (randi() % 3)):
+		for i in range(_num_ports_distribution.pick_random()):
 			var y  = _snap_y(randi() % l)
 			outputs.append(Vector2(0, y))
 	#print(inputs, outputs)

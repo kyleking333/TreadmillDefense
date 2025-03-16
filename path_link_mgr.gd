@@ -40,15 +40,14 @@ func _ready() -> void:
 	_insert(0, _min_links_to_insert, true)  # first few links
 	while len(_links) + _min_links_to_insert < max_num_visible_pathlinks:
 		_insert(len(_links)-1, _min_links_to_insert, true)  # more links, don't need to wrap
-	_insert(len(_links)-1)  # last links, need to wrap to connect with first link
+	_insert(len(_links))  # last links, need to wrap to connect with first link
 	
-	var to_idx = func to_idx(v: Vector2): return int(v.y / 64)
-	
-	for link in _links:
-		print(", ".join(link.inputs.map(to_idx)) + " -> " + ", ".join(link.outputs.map(to_idx)))
+	#var to_idx = func to_idx(v: Vector2): return int(v.y / 64)
+	#for link in _links:
+		#print(", ".join(link.inputs.map(to_idx)) + " -> " + ", ".join(link.outputs.map(to_idx)))
 
 func insert():
-	_insert(len(_links)-1)  #TODO: not constant value, random index into hidden links
+	_insert(len(_links))  #TODO: not constant value, random index into hidden links
 
 func _insert(pathlink_index: int, num_links=_min_links_to_insert, ignore_output_matching=false):
 	for i in range(pathlink_index, len(_links)):
