@@ -40,6 +40,9 @@ position = Vector2(384, 540)
 scale = Vector2(50, 123.2)
 shape = SubResource("RectangleShape2D_mlvnq")
 
+[node name="PathLinkMgr" parent="." node_paths=PackedStringArray("level_area") instance=ExtResource("5_27pg0")]
+level_area = NodePath("../ColorRect")
+
 [node name="NorthWall" type="StaticBody2D" parent="."]
 collision_layer = 8
 
@@ -79,6 +82,3 @@ position = Vector2(320, 759)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 offset = Vector2(960, 540)
-
-[node name="PathLinkMgr" parent="." node_paths=PackedStringArray("level_area") instance=ExtResource("5_27pg0")]
-level_area = NodePath("../ColorRect")
