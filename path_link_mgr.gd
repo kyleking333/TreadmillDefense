@@ -42,9 +42,9 @@ func _ready() -> void:
 		_insert(len(_links)-1, _min_links_to_insert, true)  # more links, don't need to wrap
 	_insert(len(_links))  # last links, need to wrap to connect with first link
 	
-	#var to_idx = func to_idx(v: Vector2): return int(v.y / 64)
-	#for link in _links:
-		#print(", ".join(link.inputs.map(to_idx)) + " -> " + ", ".join(link.outputs.map(to_idx)))
+	var to_idx = func to_idx(v: Vector2): return int(v.y / 64)
+	for link in _links:
+		print(", ".join(link.inputs.map(to_idx)) + " -> " + ", ".join(link.outputs.map(to_idx)))
 
 func insert():
 	_insert(len(_links))  #TODO: not constant value, random index into hidden links
