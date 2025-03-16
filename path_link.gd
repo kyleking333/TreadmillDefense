@@ -42,6 +42,7 @@ func _ready() -> void:
 	
 	# first, have inputs choose an output to path to
 	for input_port in inputs:
+		has_path[input_port.y/64] = true
 		var target_y = get_closest(input_port, outputs).y
 		if input_port.y < target_y:
 			for i in range(input_port.y, target_y, 64):
@@ -52,6 +53,7 @@ func _ready() -> void:
 	
 	# next, have any neglected outputs choose an input to path to
 	for output_port in outputs:
+		has_path[output_port.y/64] = true
 		if not has_path[output_port.y/64]:
 			var target_y = get_closest(output_port, inputs).y
 			if output_port.y < target_y:
