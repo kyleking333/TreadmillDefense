@@ -15,4 +15,4 @@ func _process(delta: float) -> void:
 	velocity = SPEED * _dir * delta
 	var collided = move_and_slide()
 	if collided:
-		print("collided")
+		pass#print("collided")

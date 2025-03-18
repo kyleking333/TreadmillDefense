@@ -7,7 +7,7 @@ extends Area2D
 @export var inputs: Array[Vector2]
 @export var outputs: Array[Vector2]
 
-const _num_ports_distribution = [1, 1, 1, 1, 1, 2, 2, 3]
+const _num_ports_distribution = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 3]
 
 func get_size():
 	return $Sprite2D.texture.get_size() * $Sprite2D.scale
