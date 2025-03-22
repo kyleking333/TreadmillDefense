@@ -30,8 +30,10 @@ func _prev_link_i(i):
 	return (i - 1 + len(_links)) % len(_links)
 
 func _next_link_i(i):
-	return (i + 1) % len(_links)
+	return _next_n_links_i(i, 1)
 
+func _next_n_links_i(i, n):
+	return (i + n) % len(_links)
 
 func _ready() -> void:
 	_level_width = level_area.get_size()[0]
@@ -67,9 +69,26 @@ func _insert(pathlink_index: int, num_links=_min_links_to_insert, ignore_output_
 		add_child(next_link)
 		
 func _process(delta: float) -> void:
+	var path_looped = false
+	var increment_vector = Vector2(path_speed * delta, 0)
 	for link in _links:
-		link.position += Vector2(path_speed * delta, 0)
+		link.position += increment_vector
 	if _links[_first_visible_link_index].position.x > level_area.position.x:  # left a gap at the front
 		var index_before_first = _prev_link_i(_first_visible_link_index)
+		if index_before_first == 0:
+			path_looped = true
 		_links[index_before_first].position = _links[_first_visible_link_index].position - Vector2(_link_width, 0)
 		_first_visible_link_index = index_before_first
+	if path_looped:
+		Grid.set_path_offset(_links[0].position.x)
+	else:
+		Grid.update_path_offset_by(increment_vector.x)
+
+func get_link_at(x_pixel: float):
+	var first_vis_link_x = _links[_first_visible_link_index].position.x
+	var num_links_from_first_vis = int((x_pixel - first_vis_link_x) / Grid.cell_size)
+	return _links[_next_n_links_i(_first_visible_link_index, num_links_from_first_vis)]
+	
+func is_path_at(cell: Grid.Cell):
+	var link = get_link_at(cell.to_pixel().x)
+	return link.has_path[cell.y]

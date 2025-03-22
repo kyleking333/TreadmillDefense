@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://d1uwpfvvkuygw"]
+
+[ext_resource type="Texture2D" uid="uid://baluf20s5qxnh" path="res://icon.svg" id="1_3ejvn"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_oa2u7"]
+size = Vector2(128, 128)
+
+[node name="TowerSpawnArea" type="Area2D" groups=["TowerSpawnArea"]]
+scale = Vector2(0.5, 0.5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(64, 64)
+shape = SubResource("RectangleShape2D_oa2u7")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+modulate = Color(1, 0.968627, 0, 0.545098)
+position = Vector2(64, 64)
+texture = ExtResource("1_3ejvn")

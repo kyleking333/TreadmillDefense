@@ -45,28 +45,28 @@ shape = SubResource("RectangleShape2D_mlvnq")
 [node name="PathLinkMgr" parent="." node_paths=PackedStringArray("level_area") instance=ExtResource("2_tu7cs")]
 level_area = NodePath("../bg")
 
-[node name="NorthWall" type="StaticBody2D" parent="."]
+[node name="NorthWall" type="StaticBody2D" parent="." groups=["PlayerWall"]]
 collision_layer = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="NorthWall"]
 position = Vector2(384, -16)
 shape = SubResource("RectangleShape2D_snwa2")
 
-[node name="SouthWall" type="StaticBody2D" parent="."]
+[node name="SouthWall" type="StaticBody2D" parent="." groups=["PlayerWall"]]
 collision_layer = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="SouthWall"]
 position = Vector2(384, 1097.5)
 shape = SubResource("RectangleShape2D_ohbwx")
 
-[node name="WestWall" type="StaticBody2D" parent="."]
+[node name="WestWall" type="StaticBody2D" parent="." groups=["PlayerWall"]]
 collision_layer = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="WestWall"]
 position = Vector2(115, 541.5)
 shape = SubResource("RectangleShape2D_6o2jl")
 
-[node name="EastWall" type="StaticBody2D" parent="."]
+[node name="EastWall" type="StaticBody2D" parent="." groups=["PlayerWall"]]
 collision_layer = 8
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="EastWall"]

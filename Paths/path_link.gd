@@ -7,6 +7,8 @@ extends Area2D
 @export var inputs: Array  # Grid.Cell
 @export var outputs: Array  # Grid.Cell
 
+var has_path: Array
+
 const _num_ports_distribution = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 3]
 
 func get_size():
@@ -32,7 +34,7 @@ func _ready() -> void:
 	#print(inputs, outputs)
 	
 	# now that inputs/outputs are decided, generate paths
-	var has_path = Array()
+	has_path = Array()
 	has_path.resize(Grid.num_rows())
 	has_path.fill(false)
 	
