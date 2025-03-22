@@ -15,10 +15,10 @@ var max_num_visible_pathlinks
 var path_speed: float = 30
 
 # Private
-@onready var _link_template = load("path_link.tscn")
+@onready var _link_template = load("Paths/path_link.tscn")
 var _level_width: float
 var _links: Array[PathLink]
-var _link_width: float = 64
+var _link_width: float = Grid.cell_size
 var _first_visible_link_index = 0
 
 # Constants
@@ -42,9 +42,9 @@ func _ready() -> void:
 		_insert(len(_links)-1, _min_links_to_insert, true)  # more links, don't need to wrap
 	_insert(len(_links))  # last links, need to wrap to connect with first link
 	
-	var to_idx = func to_idx(v: Vector2): return int(v.y / 64)
-	for link in _links:
-		print(", ".join(link.inputs.map(to_idx)) + " -> " + ", ".join(link.outputs.map(to_idx)))
+	#var to_idx = func to_idx(c: Grid.Cell): return c.y
+	#for link in _links:
+		#print(", ".join(link.inputs.map(to_idx)) + " -> " + ", ".join(link.outputs.map(to_idx)))
 
 func insert():
 	_insert(len(_links))  #TODO: not constant value, random index into hidden links
