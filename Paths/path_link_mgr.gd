@@ -12,7 +12,7 @@ extends Node
 # Public
 var num_fully_visible_pathlinks
 var max_num_visible_pathlinks
-var path_speed: float = 100
+var path_speed: float = 30
 
 # Private
 @onready var _link_template = load("path_link.tscn")

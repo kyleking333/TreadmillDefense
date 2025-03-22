@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dffc26uerwjhi"]
 
-[ext_resource type="Script" path="res://path_link_mgr.gd" id="1_xxfnd"]
+[ext_resource type="Script" path="res://Paths/path_link_mgr.gd" id="1_xxfnd"]
 
 [node name="PathLinkMgr" type="Node"]
 script = ExtResource("1_xxfnd")
