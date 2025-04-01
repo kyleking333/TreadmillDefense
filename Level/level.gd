@@ -19,6 +19,9 @@ func highlight_spawnable_areas():
 			tower_spawn_instance.position = target_pixel
 			add_child(tower_spawn_instance)
 
+func _ready() -> void:
+	$Player.set_path_speed($PathLinkMgr.path_speed)
+
 func _process(delta: float) -> void:
 	var path_shift =Vector2($PathLinkMgr.path_speed * delta, 0)
 	for n in get_tree().get_nodes_in_group("TowerSpawnArea"):
