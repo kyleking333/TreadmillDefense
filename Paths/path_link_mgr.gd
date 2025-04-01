@@ -19,20 +19,19 @@ var path_speed: float = 30
 var _level_width: float
 var _links: Array[PathLink]
 var _link_width: float = Grid.cell_size
-var _first_visible_link_index = 0
+var _first_visible_link_index: int = 0
 
 # Constants
 const _min_links_to_insert = 4
 
 # Helpers
-
-func _prev_link_i(i):
+func _prev_link_i(i: int) -> int: # get index of previous link
 	return (i - 1 + len(_links)) % len(_links)
 
-func _next_link_i(i):
+func _next_link_i(i: int) -> int: # get index of next link
 	return _next_n_links_i(i, 1)
 
-func _next_n_links_i(i, n):
+func _next_n_links_i(i: int, n: int) -> int: # get index that is n-links ahead
 	return (i + n) % len(_links)
 
 func _ready() -> void:
@@ -46,7 +45,7 @@ func _ready() -> void:
 	
 	#var to_idx = func to_idx(c: Grid.Cell): return c.y
 	#for link in _links:
-		#print(", ".join(link.inputs.map(to_idx)) + " -> " + ", ".join(link.outputs.map(to_idx)))
+		#print(", ".join(link.left_ports.map(to_idx)) + " -> " + ", ".join(link.right_ports.map(to_idx)))
 
 func insert():
 	_insert(len(_links))  #TODO: not constant value, random index into hidden links
@@ -63,9 +62,9 @@ func _insert(pathlink_index: int, num_links=_min_links_to_insert, ignore_output_
 		else:
 			var prev_link = _links[_prev_link_i(new_index)]
 			next_link.position = prev_link.position + Vector2(_link_width, 0)
-			next_link.inputs = prev_link.outputs.duplicate()
+			next_link.left_ports = prev_link.right_ports.duplicate()
 			if i+1 == num_links and not ignore_output_matching:  # last iter
-				next_link.outputs = _links[_next_link_i(new_index)].inputs.duplicate()
+				next_link.right_ports = _links[_next_link_i(new_index)].left_ports.duplicate()
 		add_child(next_link)
 		
 func _process(delta: float) -> void:
@@ -74,7 +73,7 @@ func _process(delta: float) -> void:
 	for link in _links:
 		link.position += increment_vector
 	if _links[_first_visible_link_index].position.x > level_area.position.x:  # left a gap at the front
-		var index_before_first = _prev_link_i(_first_visible_link_index)
+		var index_before_first: int = _prev_link_i(_first_visible_link_index)
 		if index_before_first == 0:
 			path_looped = true
 		_links[index_before_first].position = _links[_first_visible_link_index].position - Vector2(_link_width, 0)
@@ -91,4 +90,22 @@ func get_link_at(x_pixel: float):
 	
 func is_path_at(cell: Grid.Cell):
 	var link = get_link_at(cell.to_pixel().x)
-	return link.has_path[cell.y]
+	return link.cell_has_path[cell.y]
+
+func get_enemy_spawn_locations() -> Array: # where can an enemy spawn *right now*
+	var res = Array()
+	 # Choose the second-to-last visible cell so they don't fall off the back on spawn
+	print("spawning from link"+str(_next_n_links_i(_first_visible_link_index, num_fully_visible_pathlinks - 1)))
+	var l = _links[_next_n_links_i(_first_visible_link_index, num_fully_visible_pathlinks - 1)]
+	#return l.left_ports
+	for lp in l.left_ports:
+		res.append(lp.to_pixel(true, true))
+		print(lp.to_pixel(true, true))
+	return res
+	
+func get_enemy_next_location(current_position: Vector2):
+	var link = get_link_at(current_position.x)
+	if link.is_left_port(Grid.Cell.new(current_position.x, current_position.y)):  # done with this link
+		link = _links[_prev_link_i(_links.find(link))]  # set link to 'previous' (left) link
+	return link.paths.pick_random().curve.get_point_position(-1) + link.position # pick a path and go to the end (assumes x=0 is beginning of game)
+	

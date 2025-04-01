@@ -1,9 +1,8 @@
-[gd_scene load_steps=11 format=3 uid="uid://dnakqitx23ih0"]
+[gd_scene load_steps=10 format=3 uid="uid://dnakqitx23ih0"]
 
 [ext_resource type="Script" path="res://Level/level.gd" id="1_sc0ap"]
 [ext_resource type="PackedScene" uid="uid://dffc26uerwjhi" path="res://Paths/path_link_mgr.tscn" id="2_tu7cs"]
 [ext_resource type="PackedScene" uid="uid://mf6peg4j56ge" path="res://Player/player.tscn" id="3_rwnx7"]
-[ext_resource type="PackedScene" uid="uid://cg33kttlotwox" path="res://Enemies/enemy.tscn" id="4_c5oq5"]
 [ext_resource type="PackedScene" uid="uid://cn5ojvi34i54u" path="res://Towers/tower.tscn" id="5_gm7da"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mlvnq"]
@@ -76,11 +75,13 @@ shape = SubResource("RectangleShape2D_c0yl8")
 [node name="Player" parent="." instance=ExtResource("3_rwnx7")]
 position = Vector2(180, 540)
 
-[node name="Enemy" parent="." instance=ExtResource("4_c5oq5")]
-position = Vector2(1700, 540)
-
 [node name="Tower" parent="." instance=ExtResource("5_gm7da")]
 position = Vector2(320, 759)
 
 [node name="Camera2D" type="Camera2D" parent="."]
 offset = Vector2(960, 540)
+
+[node name="EnemySpawnTimer" type="Timer" parent="."]
+autostart = true
+
+[connection signal="timeout" from="EnemySpawnTimer" to="." method="_on_enemy_spawn_timer_timeout"]

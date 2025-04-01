@@ -1,16 +1,27 @@
-[gd_scene load_steps=3 format=3 uid="uid://cg33kttlotwox"]
+[gd_scene load_steps=5 format=3 uid="uid://cg33kttlotwox"]
 
 [ext_resource type="Texture2D" uid="uid://baluf20s5qxnh" path="res://icon.svg" id="1_8isf3"]
+[ext_resource type="Script" path="res://Enemies/enemy.gd" id="1_uuw0y"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_ef7kj"]
 size = Vector2(128, 126)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_6o5er"]
+
 [node name="Enemy" type="CharacterBody2D"]
 modulate = Color(1, 0, 0, 1)
 scale = Vector2(0.5, 0.5)
+script = ExtResource("1_uuw0y")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 shape = SubResource("RectangleShape2D_ef7kj")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture = ExtResource("1_8isf3")
+
+[node name="Target" type="Area2D" parent="."]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Target"]
+shape = SubResource("RectangleShape2D_6o5er")
+
+[connection signal="body_entered" from="Target" to="." method="_on_target_body_entered"]

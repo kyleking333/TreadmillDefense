@@ -25,8 +25,10 @@ func _ready() -> void:
 	screen_height = tmp[1]
 
 func num_rows():
+	@warning_ignore("integer_division")
 	return int(screen_height / cell_size)
 func num_cols():
+	@warning_ignore("integer_division")
 	return int(screen_width / cell_size)
 
 func random(x_index: int = -1, y_index: int = -1):
